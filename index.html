@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1b1640">
+<title>בתאל</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="בתאל">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=David+Libre:wght@500;700&family=Heebo:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f2fb; --surface:#ffffff; --surface2:#efecf9; --ink:#1c1934; --muted:#6f6a8a; --line:rgba(28,25,52,.08);
+  --brand1:#2a1f6b; --brand2:#5b3fd1; --brand3:#c7a35a; --glow:rgba(91,63,209,.25);
+  --c-daily:#5b3fd1; --c-shmira:#0e8f86; --c-yeshua:#d0782d; --c-ramban:#b0438f;
+  --fs:23px; --r:22px;
+  --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
+}
+html[data-theme="dark"]{
+  --bg:#0e0c1d; --surface:#18152d; --surface2:#221e3d; --ink:#ece9ff; --muted:#9d97c0; --line:rgba(255,255,255,.07);
+  --brand1:#1a1440; --brand2:#7c62ff; --glow:rgba(124,98,255,.3);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Heebo",system-ui,sans-serif;min-height:100vh;transition:background .3s,color .3s}
+button{font-family:inherit;color:inherit}
+.hidden{display:none!important}
+
+/* ---------- app shell ---------- */
+.view{max-width:640px;margin:0 auto;padding:0 18px calc(110px + var(--safe-b))}
+.hero{
+  position:relative;overflow:hidden;margin:0 -18px;padding:calc(26px + var(--safe-t)) 22px 30px;
+  background:radial-gradient(120% 140% at 100% 0%, #6d4dff 0%, transparent 55%),
+             radial-gradient(90% 120% at 0% 100%, #c7a35a55 0%, transparent 60%),
+             linear-gradient(160deg,#1b1640 0%,#2a1f6b 60%,#3b2a92 100%);
+  color:#fff;border-radius:0 0 34px 34px;
+}
+.hero::after{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 4l6 15 15 6-15 6-6 15-6-15-15-6 15-6z' fill='%23ffffff' fill-opacity='.05'/%3E%3C/svg%3E");pointer-events:none}
+.brandrow{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:50px;height:50px;border-radius:16px;background:linear-gradient(145deg,#e7c97f,#b8893a);display:grid;place-items:center;box-shadow:0 6px 20px rgba(199,163,90,.45)}
+.logo-mark svg{width:38px;height:38px}
+.logo-name{font-family:"David Libre",serif;font-weight:700;font-size:36px;letter-spacing:1px;line-height:1;background:linear-gradient(180deg,#fff3d1,#e2bf72);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo-tag{font-family:"David Libre",serif;font-size:13px;opacity:.8;margin-top:4px;letter-spacing:.5px}
+.iconbtn{width:42px;height:42px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(8px)}
+.iconbtn svg{width:20px;height:20px}
+.greet{position:relative;z-index:1;margin-top:28px}
+.greet small{opacity:.7;font-size:14px;font-weight:300}
+.greet h2{margin:4px 0 0;font-size:26px;font-weight:800;letter-spacing:-.3px}
+.hdate{font-size:13px;opacity:.6;margin-top:6px}
+
+.quick{position:relative;z-index:2;margin-top:-40px;background:var(--surface);border-radius:var(--r);padding:16px;box-shadow:0 12px 40px var(--glow);display:flex;gap:12px;align-items:center;cursor:pointer;border:1px solid var(--line)}
+.quick .qi{width:52px;height:52px;border-radius:16px;background:linear-gradient(145deg,var(--brand2),#8f74ff);display:grid;place-items:center;flex-shrink:0;color:#fff}
+.quick .qi svg{width:26px;height:26px}
+.quick b{display:block;font-size:17px}
+.quick span{font-size:13px;color:var(--muted)}
+.quick .go{margin-inline-start:auto;color:var(--muted)}
+
+.sec-h{display:flex;align-items:center;justify-content:space-between;margin:28px 2px 12px}
+.sec-h h3{margin:0;font-size:19px;font-weight:800;letter-spacing:-.2px}
+.sec-h span{font-size:13px;color:var(--muted)}
+
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 4px;scrollbar-width:none;margin-top:22px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 16px;font-size:14px;font-weight:500;cursor:pointer;transition:.2s}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{
+  position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 14px 14px;
+  cursor:pointer;aspect-ratio:1/1;display:flex;flex-direction:column;overflow:hidden;transition:transform .15s, box-shadow .2s;text-align:right
+}
+.card:active{transform:scale(.97)}
+.card:hover{box-shadow:0 10px 30px var(--glow)}
+.card .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:#fff;margin-bottom:12px}
+.card .ic svg{width:20px;height:20px}
+.card b{font-size:15.5px;font-weight:700;line-height:1.3}
+.card small{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card .badge{position:absolute;top:14px;left:14px;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--surface2);color:var(--muted)}
+.card .star{position:absolute;bottom:12px;left:12px;color:var(--brand3);width:16px;height:16px}
+
+
+.list{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px 14px;cursor:pointer;text-align:right;width:100%}
+.row .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff;flex-shrink:0}
+.row .ic svg{width:20px;height:20px}
+.row b{display:block;font-size:15.5px}
+.row small{color:var(--muted);font-size:12.5px}
+.row .chev{margin-inline-start:auto;color:var(--muted);width:18px;height:18px;flex-shrink:0}
+
+.pagehead{padding:calc(22px + var(--safe-t)) 2px 6px}
+.pagehead h1{font-size:30px;font-weight:800;margin:0;letter-spacing:-.5px}
+.pagehead p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.searchbox{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:0 16px;margin:16px 0}
+.searchbox svg{width:20px;height:20px;color:var(--muted);flex-shrink:0}
+.searchbox input{flex:1;border:0;background:transparent;font:16px "Heebo",sans-serif;color:var(--ink);padding:15px 0;outline:none}
+.empty{text-align:center;color:var(--muted);padding:50px 20px;font-size:15px;line-height:1.7}
+.empty svg{width:46px;height:46px;opacity:.4;margin-bottom:8px}
+
+.setting{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.setting h4{margin:0 0 12px;font-size:15px}
+.seg{display:flex;background:var(--surface2);border-radius:14px;padding:4px;gap:4px}
+.seg button{flex:1;border:0;background:transparent;padding:10px 6px;border-radius:11px;font-size:14px;font-weight:500;cursor:pointer}
+.seg button.on{background:var(--surface);box-shadow:0 2px 8px rgba(0,0,0,.08);font-weight:700}
+.toggle{display:flex;align-items:center;justify-content:space-between}
+.sw{width:52px;height:30px;border-radius:999px;background:var(--surface2);position:relative;border:0;cursor:pointer;transition:.2s}
+.sw::after{content:"";position:absolute;top:3px;right:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:.2s}
+.sw.on{background:var(--brand2)}
+.sw.on::after{right:25px}
+input[type=range]{width:100%;accent-color:var(--brand2)}
+.preview{font-family:"Frank Ruhl Libre",serif;font-size:var(--fs);margin-top:10px;text-align:center}
+.about{font-size:13.5px;color:var(--muted);line-height:1.7}
+
+/* ---------- bottom nav ---------- */
+.tabbar{
+  position:fixed;bottom:calc(12px + var(--safe-b));left:50%;transform:translateX(-50%);width:min(560px,calc(100% - 28px));
+  display:flex;justify-content:space-around;padding:8px;border-radius:26px;z-index:30;
+  background:color-mix(in srgb,var(--surface) 82%,transparent);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
+  border:1px solid var(--line);box-shadow:0 10px 40px rgba(20,10,60,.18)
+}
+.tab{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0;border-radius:18px;cursor:pointer;color:var(--muted);font-size:11.5px;font-weight:500;transition:.2s}
+.tab svg{width:23px;height:23px}
+.tab.on{color:var(--brand2);background:color-mix(in srgb,var(--brand2) 12%,transparent)}
+
+/* ---------- reader ---------- */
+.reader{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;animation:slide .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes slide{from{transform:translateX(-24px);opacity:0}to{transform:none;opacity:1}}
+.rtop{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;padding:calc(10px + var(--safe-t)) 14px 10px;
+  background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.rbtn{width:42px;height:42px;border-radius:14px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;flex-shrink:0}
+.rbtn svg{width:20px;height:20px}
+.rbtn.fav.on{color:var(--brand3)}
+.rbtn.fav.on svg{fill:currentColor}
+.rtitle{flex:1;font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .2s}
+.reader.scrolled .rtitle{opacity:1}
+.rwrap{max-width:680px;margin:0 auto;padding:22px 20px calc(130px + var(--safe-b))}
+.rhead{text-align:center;padding:10px 0 4px}
+.rhead .ic{width:56px;height:56px;border-radius:18px;margin:0 auto 14px;display:grid;place-items:center;color:#fff}
+.rhead .ic svg{width:28px;height:28px}
+.rhead h1{font-family:"Frank Ruhl Libre",serif;font-size:32px;font-weight:700;margin:0;line-height:1.25}
+.rhead .src{color:var(--muted);font-size:13.5px;margin-top:8px;line-height:1.5}
+.rnote{margin:18px 0 6px;padding:14px 16px;border-radius:16px;background:var(--surface2);font-size:14.5px;line-height:1.7;border-inline-start:4px solid var(--cc)}
+.txt{font-family:"Frank Ruhl Libre",serif;font-size:var(--fs);line-height:2;text-align:justify;margin-top:20px}
+.txt p{margin:0 0 .75em}
+.txt h3{font:700 14px "Heebo",sans-serif;color:var(--cc);margin:1.4em 0 .4em;letter-spacing:.3px;display:flex;align-items:center;gap:8px}
+.txt h3::after{content:"";flex:1;height:1px;background:var(--line)}
+.ref{font:12.5px "Heebo",sans-serif;color:var(--muted);white-space:nowrap;margin-inline-start:6px}
+.ini{font:12.5px "Heebo",sans-serif;color:var(--muted);margin-inline-start:6px}
+.ltr{display:inline-grid;place-items:center;min-width:1.5em;height:1.5em;border-radius:8px;background:var(--surface2);font:700 13px "Heebo",sans-serif;color:var(--cc);margin-inline-end:8px;vertical-align:middle;padding:0 4px}
+.whisper{font-size:.85em;color:var(--muted)}
+
+.counter{display:flex;flex-direction:column;align-items:center;gap:10px;margin:26px 0 6px}
+.ring{width:132px;height:132px;border-radius:50%;border:0;cursor:pointer;position:relative;display:grid;place-items:center;
+  background:conic-gradient(var(--cc) calc(var(--p,0)*1%), var(--surface2) 0);transition:transform .1s}
+.ring:active{transform:scale(.95)}
+.ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--surface)}
+.ring span{position:relative;font-size:34px;font-weight:800;line-height:1}
+.ring small{position:relative;display:block;font-size:12px;color:var(--muted);font-weight:500;margin-top:4px}
+.ring .in{position:relative;text-align:center}
+.reset{border:0;background:none;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline}
+
+.rtools{position:fixed;bottom:calc(14px + var(--safe-b));left:50%;transform:translateX(-50%);z-index:45;display:flex;gap:6px;align-items:center;padding:7px;border-radius:22px;
+  background:color-mix(in srgb,var(--surface) 85%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line);box-shadow:0 10px 40px rgba(20,10,60,.2)}
+.rtools button{border:0;background:transparent;height:42px;min-width:42px;padding:0 12px;border-radius:15px;cursor:pointer;font-weight:700;font-size:14px;display:grid;place-items:center}
+.rtools button:active{background:var(--surface2)}
+.rtools button.on{background:var(--ink);color:var(--bg)}
+.rtools .sep{width:1px;height:24px;background:var(--line)}
+.rtools svg{width:20px;height:20px}
+.pn{display:flex;gap:10px;margin-top:30px}
+.pn button{flex:1;border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:12px;cursor:pointer;text-align:right;font-size:13px;color:var(--muted)}
+.pn button b{display:block;color:var(--ink);font-size:14.5px;margin-top:2px}
+.pn button.next{text-align:left}
+
+.toast{position:fixed;top:calc(16px + var(--safe-t));left:50%;transform:translate(-50%,-20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;font-weight:500;z-index:60;opacity:0;transition:.25s;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<section class="view" id="v-home">
+  <div class="hero">
+    <div class="brandrow">
+      <div class="logo">
+        <div class="logo-mark"><svg aria-label="ידי ברכת כהנים" role="img" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="kh" fill="#2a1f6b" stroke="#2a1f6b" stroke-linecap="round"><path stroke="none" d="M36.6 30.5 Q46 28.6 55.6 31 L54.6 47.5 Q53.6 55 49.6 58 L41.2 58 Q37.4 53.5 37 46 Z"/><g stroke-width="4.3"><line x1="39.6" y1="33" x2="37.6" y2="13.2"/><line x1="44.1" y1="32" x2="42.7" y2="9.6"/><line x1="49.6" y1="32" x2="52" y2="10.8"/><line x1="53.6" y1="33.5" x2="57.4" y2="16.2"/></g><line x1="39.4" y1="44" x2="33.3" y2="36.4" stroke-width="4.6"/></g><use xlink:href="#kh" href="#kh" transform="translate(64 0) scale(-1 1)"/></svg>
+</div>
+        <div><div class="logo-name">בתאל</div><div class="logo-tag">תפילות וסגולות</div></div>
+      </div>
+      <button class="iconbtn" data-nav="settings" aria-label="הגדרות"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    </div>
+    <div class="greet">
+      <small id="greetSmall">בס״ד</small>
+      <h2 id="greetTitle">בוקר טוב</h2>
+      <div class="hdate" id="hdate"></div>
+    </div>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div id="homeBody"></div>
+</section>
+
+<!-- FAVORITES -->
+<section class="view hidden" id="v-favs">
+  <div class="pagehead"><h1>מועדפים</h1><p>התפילות שסימנת בכוכב</p></div>
+  <div id="favList" class="list"></div>
+</section>
+
+<!-- SEARCH -->
+<section class="view hidden" id="v-search">
+  <div class="pagehead"><h1>חיפוש</h1><p>בכותרות ובתוך הטקסט</p></div>
+  <label class="searchbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="למשל: שמירה, חיד״א, תהלים…"></label>
+  <div id="results" class="list"></div>
+</section>
+
+<!-- SETTINGS -->
+<section class="view hidden" id="v-settings">
+  <div class="pagehead"><h1>הגדרות</h1><p>התאמה אישית של הקריאה</p></div>
+  <div class="setting"><h4>מצב תצוגה</h4>
+    <div class="seg" id="themeSeg"><button data-t="auto">אוטומטי</button><button data-t="light">בהיר</button><button data-t="dark">כהה</button></div></div>
+  <div class="setting"><h4>גודל אותיות</h4>
+    <input type="range" id="fsRange" min="16" max="40" step="1">
+    <div class="preview" id="fsPrev">מוֹדָה אֲנִי לְפָנֶיךָ</div></div>
+  <div class="setting toggle"><h4 style="margin:0">הצגת ניקוד</h4><button class="sw" id="nkSw" aria-label="ניקוד"></button></div>
+  <div class="setting"><h4>אודות</h4>
+    <div class="about">פסוקי התנ״ך נבדקו מול נוסח המסורה. ברכות השחר ופיטום הקטורת הותאמו לנוסח עדות המזרח. הסגולות מהספרים הוקלדו מצילומים – מומלץ להשוות לספר לפני אמירה קבועה.</div></div>
+</section>
+
+<!-- READER -->
+<div class="reader hidden" id="reader">
+  <div class="rtop">
+    <button class="rbtn" id="rBack" aria-label="חזרה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+    <div class="rtitle" id="rTitle"></div>
+    <button class="rbtn fav" id="rFav" aria-label="מועדף"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg></button>
+  </div>
+  <div class="rwrap" id="rBody"></div>
+</div>
+<div class="rtools hidden" id="rtools">
+  <button id="tSm" aria-label="הקטנה">א−</button>
+  <button id="tLg" aria-label="הגדלה">א+</button>
+  <span class="sep"></span>
+  <button id="tNk">ניקוד</button>
+  <span class="sep"></span>
+  <button id="tTop" aria-label="לראש הדף"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></button>
+</div>
+
+<!-- TABBAR -->
+<nav class="tabbar" id="tabbar">
+  <button class="tab on" data-nav="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>בית</button>
+  <button class="tab" data-nav="favs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>מועדפים</button>
+  <button class="tab" data-nav="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>חיפוש</button>
+  <button class="tab" data-nav="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>הגדרות</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+const H = 'יְהֹוָה';
+const B = 'בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם,';
+const CATS = {
+  daily: 'סדר יומי',
+  shmira: 'סגולות לשמירה והצלה',
+  yeshua: 'ישועה, הצלחה ובריאות',
+  ramban: 'פסוקי הרמב״ן'
+};
+
+/* block types: {p:text}, {h:heading}, {v:text, r:ref, l:letter} */
+const PRAYERS = [
+/* ---------------- daily ---------------- */
+{ id:'birkot', cat:'daily', title:'ברכות השחר לנשים', src:'נוסח עדות המזרח · על פי הידברות',
+  note:'אומרים מיד בהשכמה. אישה אומרת "מודה", "שלא עשני גויה" ו"שלא עשני שפחה", ואת "ברוך שעשני כרצונו" – בלי שם ומלכות. יש סידורים שבהם ברכות התורה באות במקום אחר בסדר; אין בכך הבדל לעניין הברכות.',
+  blocks:[
+  {h:'בהתעוררות'},
+  {p:'מוֹדָה אֲנִי לְפָנֶיךָ מֶלֶךְ חַי וְקַיָּם, שֶׁהֶחֱזַרְתָּ בִּי נִשְׁמָתִי בְּחֶמְלָה, רַבָּה אֱמוּנָתֶךָ.'},
+  {h:'נטילת ידיים'},
+  {p:B+' אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ עַל נְטִילַת יָדָיִם.'},
+  {h:'אשר יצר'},
+  {p:B+' אֲשֶׁר יָצַר אֶת הָאָדָם בְּחָכְמָה, וּבָרָא בוֹ נְקָבִים נְקָבִים, חֲלוּלִים חֲלוּלִים. גָּלוּי וְיָדוּעַ לִפְנֵי כִסֵּא כְבוֹדֶךָ, שֶׁאִם יִסָּתֵם אֶחָד מֵהֶם, אוֹ אִם יִפָּתֵחַ אֶחָד מֵהֶם, אִי אֶפְשָׁר לְהִתְקַיֵּם אֲפִילוּ שָׁעָה אֶחָת. בָּרוּךְ אַתָּה '+H+', רוֹפֵא כָל בָּשָׂר וּמַפְלִיא לַעֲשׂוֹת.'},
+  {h:'אלהי נשמה'},
+  {p:'אֱלֹהַי, נְשָׁמָה שֶׁנָּתַתָּ בִּי טְהוֹרָה. אַתָּה בְרָאתָהּ, אַתָּה יְצַרְתָּהּ, אַתָּה נְפַחְתָּהּ בִּי, וְאַתָּה מְשַׁמְּרָהּ בְּקִרְבִּי, וְאַתָּה עָתִיד לִטְּלָהּ מִמֶּנִּי, וּלְהַחֲזִירָהּ בִּי לֶעָתִיד לָבוֹא. כָּל זְמַן שֶׁהַנְּשָׁמָה בְּקִרְבִּי, מוֹדָה אֲנִי לְפָנֶיךָ, '+H+' אֱלֹהַי וֵאלֹהֵי אֲבוֹתַי, רִבּוֹן כָּל הַמַּעֲשִׂים, אֲדוֹן כָּל הַנְּשָׁמוֹת. בָּרוּךְ אַתָּה '+H+', הַמַּחֲזִיר נְשָׁמוֹת לִפְגָרִים מֵתִים.'},
+  {h:'ברכות השחר'},
+  {p:B+' הַנּוֹתֵן לַשֶּׂכְוִי בִינָה לְהַבְחִין בֵּין יוֹם וּבֵין לָיְלָה.'},
+  {p:B+' פּוֹקֵחַ עִוְרִים.'},
+  {p:B+' מַתִּיר אֲסוּרִים.'},
+  {p:B+' זוֹקֵף כְּפוּפִים.'},
+  {p:B+' מַלְבִּישׁ עֲרֻמִּים.'},
+  {p:B+' הַנּוֹתֵן לַיָּעֵף כֹּחַ.'},
+  {p:B+' רוֹקַע הָאָרֶץ עַל הַמָּיִם.'},
+  {p:B+' הַמֵּכִין מִצְעֲדֵי גָבֶר.'},
+  {p:B+' שֶׁעָשָׂה לִּי כָּל צָרְכִּי.'},
+  {p:B+' אוֹזֵר יִשְׂרָאֵל בִּגְבוּרָה.'},
+  {p:B+' עוֹטֵר יִשְׂרָאֵל בְּתִפְאָרָה.'},
+  {p:B+' שֶׁלֹּא עָשַׂנִי גּוֹיָה.'},
+  {p:B+' שֶׁלֹּא עָשַׂנִי שִׁפְחָה.'},
+  {p:'בָּרוּךְ שֶׁעָשַׂנִי כִּרְצוֹנוֹ.'},
+  {p:B+' הַמַּעֲבִיר חֶבְלֵי שֵׁנָה מֵעֵינַי וּתְנוּמָה מֵעַפְעַפָּי. וִיהִי רָצוֹן מִלְּפָנֶיךָ '+H+' אֱלֹהַי וֵאלֹהֵי אֲבוֹתַי, שֶׁתַּרְגִּילֵנִי בְּתוֹרָתֶךָ, וְתַדְבִּיקֵנִי בְּמִצְוֹתֶיךָ, וְאַל תְּבִיאֵנִי לִידֵי חֵטְא, וְלֹא לִידֵי עָוֹן, וְלֹא לִידֵי נִסָּיוֹן, וְלֹא לִידֵי בִזָּיוֹן, וְתַרְחִיקֵנִי מִיֵּצֶר הָרָע, וְתַדְבִּיקֵנִי בְּיֵצֶר הַטּוֹב, וְכֹף אֶת יִצְרִי לְהִשְׁתַּעְבֶּד לָךְ, וּתְנֵנִי הַיּוֹם וּבְכָל יוֹם לְחֵן וּלְחֶסֶד וּלְרַחֲמִים, בְּעֵינֶיךָ וּבְעֵינֵי כָל רוֹאַי, וּגְמְלֵנִי חֲסָדִים טוֹבִים. בָּרוּךְ אַתָּה '+H+', גּוֹמֵל חֲסָדִים טוֹבִים לְעַמּוֹ יִשְׂרָאֵל.'},
+  {h:'ברכות התורה'},
+  {p:B+' אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ עַל דִּבְרֵי תוֹרָה.'},
+  {p:'וְהַעֲרֶב נָא '+H+' אֱלֹהֵינוּ אֶת דִּבְרֵי תוֹרָתְךָ בְּפִינוּ וּבְפִיפִיּוֹת עַמְּךָ בֵּית יִשְׂרָאֵל, וְנִהְיֶה אֲנַחְנוּ וְצֶאֱצָאֵינוּ וְצֶאֱצָאֵי צֶאֱצָאֵינוּ, כֻּלָּנוּ יוֹדְעֵי שְׁמֶךָ וְלוֹמְדֵי תוֹרָתְךָ לִשְׁמָהּ. בָּרוּךְ אַתָּה '+H+', הַמְלַמֵּד תּוֹרָה לְעַמּוֹ יִשְׂרָאֵל.'},
+  {p:B+' אֲשֶׁר בָּחַר בָּנוּ מִכָּל הָעַמִּים וְנָתַן לָנוּ אֶת תּוֹרָתוֹ. בָּרוּךְ אַתָּה '+H+', נוֹתֵן הַתּוֹרָה.'},
+  {h:'ברכת כהנים'},
+  {p:'וַיְדַבֵּר '+H+' אֶל מֹשֶׁה לֵּאמֹר: דַּבֵּר אֶל אַהֲרֹן וְאֶל בָּנָיו לֵאמֹר, כֹּה תְבָרְכוּ אֶת בְּנֵי יִשְׂרָאֵל, אָמוֹר לָהֶם: יְבָרֶכְךָ '+H+' וְיִשְׁמְרֶךָ. יָאֵר '+H+' פָּנָיו אֵלֶיךָ וִיחֻנֶּךָּ. יִשָּׂא '+H+' פָּנָיו אֵלֶיךָ וְיָשֵׂם לְךָ שָׁלוֹם. וְשָׂמוּ אֶת שְׁמִי עַל בְּנֵי יִשְׂרָאֵל וַאֲנִי אֲבָרְכֵם.'},
+  {h:'בקשה לשמירה'},
+  {p:'יְהִי רָצוֹן מִלְּפָנֶיךָ '+H+' אֱלֹהַי וֵאלֹהֵי אֲבוֹתַי, שֶׁתַּצִּילֵנִי הַיּוֹם וּבְכָל יוֹם וָיוֹם מֵעַזֵּי פָנִים וּמֵעַזּוּת פָּנִים, מֵאָדָם רָע, וּמֵחָבֵר רָע, וּמִשָּׁכֵן רָע, וּמִפֶּגַע רָע, וּמִיֵּצֶר רָע, מֵעַיִן הָרָע, וּמִלָּשׁוֹן הָרָע, מִדִּין קָשֶׁה וּמִבַּעַל דִּין קָשֶׁה, בֵּין שֶׁהוּא בֶן בְּרִית וּבֵין שֶׁאֵינוֹ בֶן בְּרִית.'}
+]},
+{ id:'gilui', cat:'daily', title:'גילוי דעת בכוונת השמות', src:'נדפס בסידורי עדות המזרח ("איש מצליח", "עבודת ה׳") · על פי שולחן ערוך או״ח סימן ה',
+  note:'אומרים לפני התפילה, כדי שהכוונה הנכונה בשמות הקודש תחול על כל התפילות של אותו היום.',
+  blocks:[
+  {p:'הֲרֵינִי מְגַלֶּה דַעְתִּי, שֶׁמֵּעַתָּה וְעַד לְמָחָר בְּשָׁעָה זוֹ, בְּכָל פַּעַם שֶׁאַזְכִּיר שֵׁם אֲדֹנָי, אֲכַוֵּן כְּמוֹ שֶׁכָּתוּב בַּשֻּׁלְחָן עָרוּךְ: שֶׁהוּא אֲדוֹן הַכֹּל.'},
+  {p:'וּבְכָל פַּעַם שֶׁאַזְכִּיר שֵׁם הֲוָיָ״ה, אֲכַוֵּן כִּקְרִיאָתוֹ בְּאַדְנוּת, שֶׁהוּא אֲדוֹן הַכֹּל, וְכִכְתִיבָתוֹ בְּיוּ״ד הֵ״א, שֶׁהָיָה הֹוֶה וְיִהְיֶה.'},
+  {p:'וּבְכָל פַּעַם שֶׁאַזְכִּיר שֵׁם אֱלֹהִים, אֲכַוֵּן שֶׁהוּא תַּקִּיף, בַּעַל הַיְכֹלֶת וּבַעַל הַכֹּחוֹת כֻּלָּם.'}
+]},
+{ id:'ketoret', cat:'daily', title:'פיטום הקטורת', src:'כריתות ו ע״א · ירושלמי יומא פ״ד ה״ה',
+  note:'נהוג לאומרו בכל יום, שחרית ומנחה, בתור תחליף להקטרת הקטורת במקדש. רצוי לאומרו מתוך הכתב ובכוונה. הפסוקים שבסוף משתנים מעט בין הסידורים.',
+  blocks:[
+  {p:'אַתָּה הוּא '+H+' אֱלֹהֵינוּ, שֶׁהִקְטִירוּ אֲבוֹתֵינוּ לְפָנֶיךָ אֶת קְטֹרֶת הַסַּמִּים בִּזְמַן שֶׁבֵּית הַמִּקְדָּשׁ קַיָּם, כַּאֲשֶׁר צִוִּיתָ אוֹתָם עַל יַד מֹשֶׁה נְבִיאֶךָ, כַּכָּתוּב בְּתוֹרָתֶךָ:'},
+  {p:'וַיֹּאמֶר '+H+' אֶל מֹשֶׁה, קַח לְךָ סַמִּים, נָטָף וּשְׁחֵלֶת וְחֶלְבְּנָה, סַמִּים וּלְבֹנָה זַכָּה, בַּד בְּבַד יִהְיֶה. וְעָשִׂיתָ אֹתָהּ קְטֹרֶת, רֹקַח מַעֲשֵׂה רוֹקֵחַ, מְמֻלָּח טָהוֹר קֹדֶשׁ. וְשָׁחַקְתָּ מִמֶּנָּה הָדֵק, וְנָתַתָּה מִמֶּנָּה לִפְנֵי הָעֵדֻת בְּאֹהֶל מוֹעֵד אֲשֶׁר אִוָּעֵד לְךָ שָׁמָּה, קֹדֶשׁ קָדָשִׁים תִּהְיֶה לָכֶם.'},
+  {p:'וְנֶאֱמַר: וְהִקְטִיר עָלָיו אַהֲרֹן קְטֹרֶת סַמִּים, בַּבֹּקֶר בַּבֹּקֶר, בְּהֵיטִיבוֹ אֶת הַנֵּרֹת יַקְטִירֶנָּה. וּבְהַעֲלֹת אַהֲרֹן אֶת הַנֵּרֹת בֵּין הָעַרְבַּיִם יַקְטִירֶנָּה, קְטֹרֶת תָּמִיד לִפְנֵי '+H+' לְדֹרֹתֵיכֶם.'},
+  {p:'תָּנוּ רַבָּנָן, פִּטּוּם הַקְּטֹרֶת כֵּיצַד: שְׁלֹשׁ מֵאוֹת וְשִׁשִּׁים וּשְׁמוֹנָה מָנִים הָיוּ בָהּ. שְׁלֹשׁ מֵאוֹת וְשִׁשִּׁים וַחֲמִשָּׁה כְּמִנְיַן יְמוֹת הַחַמָּה, מָנֶה בְּכָל יוֹם, מַחֲצִיתוֹ בַּבֹּקֶר וּמַחֲצִיתוֹ בָּעֶרֶב. וּשְׁלֹשָׁה מָנִים יְתֵרִים, שֶׁמֵּהֶם מַכְנִיס כֹּהֵן גָּדוֹל וְנוֹטֵל מֵהֶם מְלֹא חָפְנָיו בְּיוֹם הַכִּפּוּרִים, וּמַחֲזִירָם לְמַכְתֶּשֶׁת בְּעֶרֶב יוֹם הַכִּפּוּרִים, כְּדֵי לְקַיֵּם מִצְוַת דַּקָּה מִן הַדַּקָּה.'},
+  {p:'וְאַחַד עָשָׂר סַמְמָנִים הָיוּ בָהּ, וְאֵלּוּ הֵן: הַצֳּרִי, וְהַצִּפֹּרֶן, וְהַחֶלְבְּנָה, וְהַלְּבוֹנָה, מִשְׁקַל שִׁבְעִים שִׁבְעִים מָנֶה. מוֹר, וּקְצִיעָה, וְשִׁבֹּלֶת נֵרְדְּ, וְכַרְכֹּם, מִשְׁקַל שִׁשָּׁה עָשָׂר שִׁשָּׁה עָשָׂר מָנֶה. קֹשְׁטְ שְׁנֵים עָשָׂר, וְקִלּוּפָה שְׁלֹשָׁה, וְקִנָּמוֹן תִּשְׁעָה. בּוֹרִית כַּרְשִׁינָא תִּשְׁעָה קַבִּין. יֵין קַפְרִיסִין סְאִין תְּלָת וְקַבִּין תְּלָתָא, וְאִם לֹא מָצָא יֵין קַפְרִיסִין, מֵבִיא חֲמַר חִוָּר עַתִּיק. מֶלַח סְדוֹמִית רֹבַע. מַעֲלֶה עָשָׁן כָּל שֶׁהוּא. רַבִּי נָתָן הַבַּבְלִי אוֹמֵר: אַף כִּפַּת הַיַּרְדֵּן כָּל שֶׁהִיא. וְאִם נָתַן בָּהּ דְּבַשׁ, פְּסָלָהּ. וְאִם חִסַּר אַחַת מִכָּל סַמְמָנֶיהָ, חַיָּב מִיתָה.'},
+  {p:'רַבָּן שִׁמְעוֹן בֶּן גַּמְלִיאֵל אוֹמֵר: הַצֳּרִי אֵינוֹ אֶלָּא שְׂרָף הַנּוֹטֵף מֵעֲצֵי הַקְּטָף. בּוֹרִית כַּרְשִׁינָא לָמָּה הִיא בָאָה, כְּדֵי לְשַׁפּוֹת בָּהּ אֶת הַצִּפֹּרֶן כְּדֵי שֶׁתְּהֵא נָאָה. יֵין קַפְרִיסִין לָמָּה הוּא בָא, כְּדֵי לִשְׁרוֹת בּוֹ אֶת הַצִּפֹּרֶן כְּדֵי שֶׁתְּהֵא עַזָּה. וַהֲלֹא מֵי רַגְלַיִם יָפִין לָהּ, אֶלָּא שֶׁאֵין מַכְנִיסִין מֵי רַגְלַיִם בַּמִּקְדָּשׁ מִפְּנֵי הַכָּבוֹד.'},
+  {p:'תַּנְיָא, רַבִּי נָתָן אוֹמֵר: כְּשֶׁהוּא שׁוֹחֵק, אוֹמֵר: הָדֵק הֵיטֵב, הֵיטֵב הָדֵק, מִפְּנֵי שֶׁהַקּוֹל יָפֶה לַבְּשָׂמִים. פִּטְּמָהּ לַחֲצָאִין, כְּשֵׁרָה. לִשְׁלִישׁ וְלִרְבִיעַ, לֹא שָׁמַעְנוּ. אָמַר רַבִּי יְהוּדָה: זֶה הַכְּלָל, אִם כְּמִדָּתָהּ, כְּשֵׁרָה לַחֲצָאִין. וְאִם חִסַּר אַחַת מִכָּל סַמְמָנֶיהָ, חַיָּב מִיתָה.'},
+  {p:'תָּנֵי בַר קַפָּרָא: אַחַת לְשִׁשִּׁים אוֹ לְשִׁבְעִים שָׁנָה הָיְתָה בָאָה שֶׁל שִׁירַיִם לַחֲצָאִין. וְעוֹד תָּנֵי בַר קַפָּרָא: אִלּוּ הָיָה נוֹתֵן בָּהּ קָרְטוֹב שֶׁל דְּבַשׁ, אֵין אָדָם יָכוֹל לַעֲמֹד מִפְּנֵי רֵיחָהּ. וְלָמָּה אֵין מְעָרְבִין בָּהּ דְּבַשׁ, מִפְּנֵי שֶׁהַתּוֹרָה אָמְרָה: כִּי כָל שְׂאֹר וְכָל דְּבַשׁ לֹא תַקְטִירוּ מִמֶּנּוּ אִשֶּׁה לַיהֹוָה.'},
+  {h:'שלוש פעמים כל פסוק'},
+  {p:H+' צְבָאוֹת עִמָּנוּ, מִשְׂגָּב לָנוּ אֱלֹהֵי יַעֲקֹב סֶלָה. <span class="ref">(ג״פ)</span>'},
+  {p:H+' צְבָאוֹת, אַשְׁרֵי אָדָם בֹּטֵחַ בָּךְ. <span class="ref">(ג״פ)</span>'},
+  {p:H+' הוֹשִׁיעָה, הַמֶּלֶךְ יַעֲנֵנוּ בְיוֹם קָרְאֵנוּ. <span class="ref">(ג״פ)</span>'},
+  {p:'אַתָּה סֵתֶר לִי, מִצַּר תִּצְּרֵנִי, רָנֵּי פַלֵּט תְּסוֹבְבֵנִי סֶלָה.'},
+  {p:'וְעָרְבָה לַיהֹוָה מִנְחַת יְהוּדָה וִירוּשָׁלָםִ, כִּימֵי עוֹלָם וּכְשָׁנִים קַדְמֹנִיּוֹת.'}
+]},
+{ id:'ana', cat:'daily', title:'אנא בכח', src:'מיוחס לרבי נחוניה בן הקנה',
+  blocks:[
+  {p:'אָנָּא בְּכֹחַ, גְּדֻלַּת יְמִינְךָ, תַּתִּיר צְרוּרָה. <span class="ini">(אב״ג ית״ץ)</span>'},
+  {p:'קַבֵּל רִנַּת, עַמְּךָ, שַׂגְּבֵנוּ, טַהֲרֵנוּ, נוֹרָא. <span class="ini">(קר״ע שט״ן)</span>'},
+  {p:'נָא גִבּוֹר, דּוֹרְשֵׁי יִחוּדְךָ, כְּבָבַת שָׁמְרֵם. <span class="ini">(נג״ד יכ״ש)</span>'},
+  {p:'בָּרְכֵם טַהֲרֵם, רַחֲמֵי צִדְקָתְךָ, תָּמִיד גָּמְלֵם. <span class="ini">(בט״ר צת״ג)</span>'},
+  {p:'חֲסִין קָדוֹשׁ, בְּרֹב טוּבְךָ, נַהֵל עֲדָתֶךָ. <span class="ini">(חק״ב טנ״ע)</span>'},
+  {p:'יָחִיד גֵּאֶה, לְעַמְּךָ פְּנֵה, זוֹכְרֵי קְדֻשָּׁתֶךָ. <span class="ini">(יג״ל פז״ק)</span>'},
+  {p:'שַׁוְעָתֵנוּ קַבֵּל, וּשְׁמַע צַעֲקָתֵנוּ, יוֹדֵעַ תַּעֲלֻמוֹת. <span class="ini">(שק״ו צי״ת)</span>'},
+  {p:'<span class="whisper">בלחש:</span> בָּרוּךְ שֵׁם כְּבוֹד מַלְכוּתוֹ לְעוֹלָם וָעֶד.'}
+]},
+{ id:'adon', cat:'daily', title:'אדון עולם', src:'פיוט · נוסח עדות המזרח המלא',
+  blocks:[
+  {p:'אֲדוֹן עוֹלָם אֲשֶׁר מָלַךְ, בְּטֶרֶם כָּל יְצִיר נִבְרָא. לְעֵת נַעֲשָׂה בְחֶפְצוֹ כֹּל, אֲזַי מֶלֶךְ שְׁמוֹ נִקְרָא.'},
+  {p:'וְאַחֲרֵי כִּכְלוֹת הַכֹּל, לְבַדּוֹ יִמְלוֹךְ נוֹרָא. וְהוּא הָיָה וְהוּא הֹוֶה, וְהוּא יִהְיֶה בְּתִפְאָרָה.'},
+  {p:'וְהוּא אֶחָד וְאֵין שֵׁנִי, לְהַמְשִׁילוֹ וּלְהַחְבִּירָה. בְּלִי רֵאשִׁית בְּלִי תַכְלִית, וְלוֹ הָעֹז וְהַמִּשְׂרָה.'},
+  {p:'בְּלִי עֵרֶךְ בְּלִי דִמְיוֹן, בְּלִי שִׁנּוּי וּתְמוּרָה. בְּלִי חִבּוּר בְּלִי פֵרוּד, גְּדָל כֹּחַ וּגְבוּרָה.'},
+  {p:'וְהוּא אֵלִי וְחַי גּוֹאֲלִי, וְצוּר חֶבְלִי בְּיוֹם צָרָה. וְהוּא נִסִּי וּמָנוּסִי, מְנָת כּוֹסִי בְּיוֹם אֶקְרָא.'},
+  {p:'וְהוּא רוֹפֵא וְהוּא מַרְפֵּא, וְהוּא צוֹפֶה וְהוּא עֶזְרָה. בְּיָדוֹ אַפְקִיד רוּחִי, בְּעֵת אִישַׁן וְאָעִירָה.'},
+  {p:'וְעִם רוּחִי גְּוִיָּתִי, אֲדֹנָי לִי וְלֹא אִירָא. בְּמִקְדָּשׁוֹ תָּגֵל נַפְשִׁי, מְשִׁיחֵנוּ יִשְׁלַח מְהֵרָה.'},
+  {p:'וְאָז נָשִׁיר בְּבֵית קָדְשִׁי, אָמֵן אָמֵן, שֵׁם הַנּוֹרָא.'}
+]},
+
+/* ---------------- shmira ---------------- */
+{ id:'hagana', cat:'shmira', title:'פסוק להגנה', src:'נוסח שמירת המלאכים', repeat:3,
+  note:'יש לומר שלוש פעמים.',
+  blocks:[
+  {p:'בְּשֵׁם אֲדֹנָי אֱלֹהֵי יִשְׂרָאֵל, מִימִינִי מִיכָאֵל, וּמִשְּׂמֹאלִי גַּבְרִיאֵל, וּמִלְּפָנַי אוּרִיאֵל, וּמֵאֲחוֹרַי רְפָאֵל, וְעַל רֹאשִׁי שְׁכִינַת אֵל.'}
+]},
+{ id:'chida-shmira', cat:'shmira', title:'סגולה לשמירה והצלה', src:'מהחיד״א זצ״ל', repeat:3,
+  note:'האומרת זה שלוש פעמים בכל יום – תינצל מכל צרה.',
+  blocks:[
+  {p:'יָהּ '+H+' אֶהְיֶה אֲשֶׁר אֶהְיֶה שַׁדַּי צְבָאוֹת עִמָּנוּ, מִשְׂגָּב לָנוּ אֱלֹהֵי יַעֲקֹב סֶלָה.'},
+  {p:'יָהּ '+H+' אֶהְיֶה אֲשֶׁר אֶהְיֶה שַׁדַּי צְבָאוֹת, אַשְׁרֵי אָדָם בֹּטֵחַ בָּךְ.'},
+  {p:'יָהּ '+H+' אֶהְיֶה אֲשֶׁר אֶהְיֶה שַׁדַּי הוֹשִׁיעָה, הַמֶּלֶךְ יַעֲנֵנוּ בְיוֹם קָרְאֵנוּ.'}
+]},
+{ id:'tzara', cat:'shmira', title:'סגולה להינצל מצרה', src:'קבלה מרבנו יהודה החסיד זצ״ל',
+  note:'שלושה פסוקים המסוגלים לשמירה מפחד. כל האומר שלושה פסוקים אלו – שסימנם אב״י – כסדרם ולמפרע בכל יום, ניצול מכל צרה.',
+  blocks:[
+  {h:'א – אתה סתר לי'},
+  {v:'אַתָּה סֵתֶר לִי, מִצַּר תִּצְּרֵנִי, רָנֵּי פַלֵּט תְּסוֹבְבֵנִי סֶלָה.', r:'תהלים לב, ז'},
+  {p:'<span class="whisper">למפרע:</span> סֶלָה תְּסוֹבְבֵנִי פַלֵּט רָנֵּי, תִּצְּרֵנִי מִצַּר לִי סֵתֶר אַתָּה.'},
+  {h:'ב – בטחו בה׳'},
+  {v:'בִּטְחוּ בַיהֹוָה עֲדֵי עַד, כִּי בְּיָהּ '+H+' צוּר עוֹלָמִים.', r:'ישעיהו כו, ד'},
+  {p:'<span class="whisper">למפרע:</span> עוֹלָמִים צוּר '+H+' בְּיָהּ כִּי, עַד עֲדֵי בַיהֹוָה בִּטְחוּ.'},
+  {h:'י – ה׳ עז לעמו יתן'},
+  {v:H+' עֹז לְעַמּוֹ יִתֵּן, '+H+' יְבָרֵךְ אֶת עַמּוֹ בַשָּׁלוֹם.', r:'תהלים כט, יא'},
+  {p:'<span class="whisper">למפרע (מפסיק מעט):</span> בַשָּׁלוֹם עַמּוֹ אֶת יְבָרֵךְ '+H+', יִתֵּן לְעַמּוֹ עֹז '+H+'.'}
+]},
+{ id:'vayisu', cat:'shmira', title:'סגולה להינצל מכל רע', src:'מקונטרס "שומר ישראל" למרן החיד״א זצ״ל', repeat:13,
+  note:'"מצאתי כתוב: כל האומר פסוק זה י״ג פעמים – ניצול מכל רע." ויכוון בשם אספ״ן.',
+  blocks:[
+  {v:'וַיִּסָּעוּ, וַיְהִי חִתַּת אֱלֹהִים עַל הֶעָרִים אֲשֶׁר סְבִיבוֹתֵיהֶם, וְלֹא רָדְפוּ אַחֲרֵי בְּנֵי יַעֲקֹב.', r:'בראשית לה, ה'}
+]},
+{ id:'yosef-beseder', cat:'shmira', title:'סגולה לשמירה והצלה (יהי כבוד)', src:'מקונטרס "יוסף בסדר" למרן החיד״א זצ״ל',
+  note:'"מצאתי כתוב בכתב רב ומקובל: מי שאומר פסוקים אלו – ינצל מכל צרה."',
+  blocks:[
+  {p:'יְהִי כְבוֹד '+H+' לְעוֹלָם, יִשְׂמַח '+H+' בְּמַעֲשָׂיו. יְהִי שֵׁם '+H+' מְבֹרָךְ, מֵעַתָּה וְעַד עוֹלָם. הַמַּבִּיט לָאָרֶץ וַתִּרְעָד, יִגַּע בֶּהָרִים וְיֶעֱשָׁנוּ. רוּמָה עַל הַשָּׁמַיִם אֱלֹהִים, עַל כָּל הָאָרֶץ כְּבוֹדֶךָ.'},
+  {p:'יְהִי רָצוֹן מִלְּפָנֶיךָ '+H+' אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ, שֶׁתַּעֲשֶׂה לְמַעַן רַחֲמֶיךָ, וּבִזְכוּת פְּסוּקִים אֵלּוּ וּשְׁמוֹת הַקֹּדֶשׁ הָרְמוּזִים וְהַמְּצֻרָּפִים בָּהֶם, תְּרַחֵם עָלֵינוּ וְתַצִּילֵנוּ מִכָּל צָרָה, וְתִרְצֵנוּ בְּרַחֲמֶיךָ הָרַבִּים, אָמֵן נֶצַח סֶלָה וָעֶד.'}
+]},
+{ id:'volozhin', cat:'shmira', title:'אין עוד מלבדו', src:'סגולה נפלאה מרבנו חיים מוולוז׳ין · ספר "נפש החיים"',
+  note:'ובאמת הוא ענין גדול וסגולה נפלאה, להסיר ולבטל מעליו כל דינין ורצונות אחרים, שלא יוכלו לשלוט בו ולא יעשו שום רושם כלל.',
+  blocks:[
+  {p:'כשאדם קובע בלבו לאמר, הלא ה׳ הוא האלהים האמיתי, ואין עוד מלבדו יתברך שום כח בעולם וכל העולמות כלל, והכל מלא רק אחדותו הפשוט יתברך שמו, ומבטל בלבו בטול גמור, ואינו משגיח כלל על שום כח ורצון בעולם, ומשעבד ומדבק טוהר מחשבתו רק לאדון יחיד ברוך הוא – כן יספיק הוא יתברך בידו, שממילא יתבטלו מעליו כל הכוחות והרצונות שבעולם, שלא יוכלו לפעול לו שום דבר כלל. וגם יגזור אומר ויקם לו, לפעול ענינים וניסים נפלאים הפוך סידור הטבעים…'},
+  {p:'"מִי שֶׁאָמַר לַשֶּׁמֶן וְיִדְלֹק, יֹאמַר לַחֹמֶץ וְיִדְלֹק." <span class="ref">(תענית כה ע״א, רבי חנינא בן דוסא)</span>'}
+]},
+
+/* ---------------- yeshua ---------------- */
+{ id:'hatzlacha', cat:'yeshua', title:'תפילה להצלחה ובריאות', src:'למרן החיד״א זצ״ל בספרו "שומר ישראל"',
+  blocks:[
+  {p:'יְהִי רָצוֹן מִלְּפָנֶיךָ, '+H+' אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ, שֶׁתִּתְמַלֵּא רַחֲמִים עָלֵינוּ, וַעֲשֵׂה לְמַעַן אֲבוֹתֵינוּ הַקְּדוֹשִׁים, אַבְרָהָם אִישׁ הַחֶסֶד, יִצְחָק נֶאְזָר בִּגְבוּרָה, יַעֲקֹב כְּלִיל תִּפְאֶרֶת, וּתְבַטֵּל מֵעָלֵינוּ כָּל גְּזֵרוֹת קָשׁוֹת וְרָעוֹת, וּבְצֵל כְּנָפֶיךָ תַּסְתִּירֵנוּ. וְנִהְיֶה בְּרִיאִים בְּכָל אֵבָרֵינוּ וְגִידֵינוּ, וְתִשְׁמְרֵנוּ מִכָּל צָרָה וּמִכָּל פַּחַד וּמִכָּל חֹלִי, וְתַצִּילֵנוּ מִכָּל מִינֵי כִשּׁוּף וּמִבִּלְבּוּל הַדַּעַת, וְאַל יִדְוֶה לִבֵּנוּ, וְאַל יֶחְשְׁכוּ עֵינֵינוּ, וְנִהְיֶה מְיֻשָּׁבִים בְּדַעְתֵּנוּ, וְתֶן בָּנוּ כֹּחַ וּבְרִיאוּת לַעֲבוֹדָתֶךָ וּלְיִרְאָתֶךָ, וְתַאֲרִיךְ יָמֵינוּ בְּטוֹב וּשְׁנוֹתֵינוּ בַּנְּעִימִים, וּבְכָל אֲשֶׁר נִפְנֶה נַשְׂכִּיל, וּבְכָל אֲשֶׁר נַעֲשֶׂה נַצְלִיחַ, אָמֵן כֵּן יְהִי רָצוֹן.'},
+  {p:'יְהִי חַסְדְּךָ '+H+' עָלֵינוּ, כַּאֲשֶׁר יִחַלְנוּ לָךְ. הַרְאֵנוּ '+H+' חַסְדֶּךָ, וְיֶשְׁעֲךָ תִּתֶּן לָנוּ. וַאֲנִי בְּחַסְדְּךָ בָטַחְתִּי, יָגֵל לִבִּי בִּישׁוּעָתֶךָ, אָשִׁירָה לַיהֹוָה כִּי גָמַל עָלָי. הִנֵּה אֵל יְשׁוּעָתִי אֶבְטַח וְלֹא אֶפְחָד, כִּי עָזִּי וְזִמְרָת יָהּ '+H+', וַיְהִי לִי לִישׁוּעָה.'}
+]},
+{ id:'hamtakat', cat:'yeshua', title:'תפילה להמתקת הדינים', src:'חיברה רבנו הקדוש רבי אהרן ראטה, בעל "שומר אמונים" · לאמרה בכל זמן',
+  blocks:[
+  {p:'אֲנִי מַאֲמִין בֶּאֱמוּנָה שְׁלֵמָה, שֶׁזֶּה הַצַּעַר וְהַיִּסּוּרִים שֶׁבָּא לִי הוּא בְּהַשְׁגָּחָה פְּרָטִית מֵעִם ה׳, וְהִנְנִי מְקַבֵּל עָלַי בְּאַהֲבָה, וְכָל זֶה בָּא לִי מִסִּבּוֹת עֲוֹנוֹתַי הָרַבִּים, וְצַדִּיק אַתָּה ה׳ עַל כָּל הַבָּא עָלַי, כִּי אֱמֶת עָשִׂיתָ וַאֲנִי הִרְשָׁעְתִּי.'},
+  {p:'וִיהִי רָצוֹן שֶׁיִּהְיוּ אֵלּוּ הַיִּסּוּרִים לְכַפָּרָה עַל עֲוֹנוֹתַי הָרַבִּים <span class="whisper">(וְאִם בְּעֵת רָצוֹן יֹאמַר גַּם כֵּן: וּלְהָקֵל בָּזֶה צַעַר שְׁכִינַת עֻזֵּנוּ כִּבְיָכוֹל, וְצַעֲרָן שֶׁל יִשְׂרָאֵל)</span>.'},
+  {p:'וְהִנֵּה מִצַּד הַדִּין הָיִיתִי צָרִיךְ לְפָרֵט וְלָשׁוּב וּלְהִתְוַדּוֹת עַל הַחֵטְא וְהֶעָוֹן שֶׁבְּסִבָּתָם בָּא לִי אֵלּוּ הַיִּסּוּרִים, אֲבָל גָּלוּי וְיָדוּעַ לְפָנֶיךָ שֶׁאֵין אִתִּי יוֹדֵעַ עַד מָה. לָכֵן יְהִי רָצוֹן מִלְּפָנֶיךָ אָבִי שֶׁבַּשָּׁמַיִם, שֶׁתִּמְחוֹק וּתְשָׁרֵשׁ כָּל הַחֵטְא וְעָוֹן וָפֶשַׁע שֶׁגָּרְמוּ לִי אֵלּוּ הַיִּסּוּרִים, וְיֻמְתְּקוּ כָּל הַדִּינִים מֵעָלַי וּמֵעַל כָּל יִשְׂרָאֵל, וְיִתְהַפְּכוּ כָּל הַצֵּרוּפִים לְטוֹבָה, וְיִמְשֹׁךְ חֲסָדִים טוֹבִים וּמְגֻלִּים לָנוּ וּלְכָל בֵּית יִשְׂרָאֵל עַד עוֹלָם. אָמֵן.'},
+  {p:'<span class="whisper">"ואם יאמר זה הנוסח, אז נמתקים ממנו בעזרת ה׳ כל הדינים, ויתהפכו כל הצירופים לטובה, ויהיו היסורים כפרה לכל עוונותיו. בפרט אם ירגיל עצמו לומר זאת גם על כל דבר קטן… ואם מתחזק באמונת ה׳, אז גם אם נגזרה עליו גזרה ח״ו, נמתק הדין מעליו." (שומר אמונים, מאמר השגחה פרטית, פרק י״ד)</span>'}
+]},
+{ id:'yanuka', cat:'yeshua', title:'סגולת "הינוקא"', src:'בשם הרב שלמה יהודה בארי שליט״א · לביטול גזירות והמתקת הדינים',
+  note:'לאומרם בכל יום. כל האומר פסוקים אלו ומביט לשמיים – מסוגל לפעול הרבה טובות וישועות גדולות.',
+  blocks:[
+  {v:'רְאֵה עָנְיִי וַעֲמָלִי, וְשָׂא לְכָל חַטֹּאותָי.', r:'תהלים כה, יח', l:'א'},
+  {v:'חוּשָׁה לְעֶזְרָתִי, '+H+' תְּשׁוּעָתִי.', r:'תהלים לח, כג', l:'ב'},
+  {v:'עֵינַי תָּמִיד אֶל '+H+', כִּי הוּא יוֹצִיא מֵרֶשֶׁת רַגְלָי.', r:'תהלים כה, טו', l:'ג'},
+  {v:'לִישׁוּעָתְךָ קִוִּיתִי '+H+'.', r:'בראשית מט, יח', l:'ד'}
+]},
+{ id:'machloket', cat:'yeshua', title:'להינצל ממחלוקת', src:'ספר המידות, ערך מריבה',
+  note:'למחלוקת, סגולה לומר: "ויקרא אסא אל ה׳" עד "אנוש".',
+  blocks:[
+  {v:'וַיִּקְרָא אָסָא אֶל '+H+' אֱלֹהָיו וַיֹּאמַר: '+H+', אֵין עִמְּךָ לַעְזוֹר בֵּין רַב לְאֵין כֹּחַ, עָזְרֵנוּ '+H+' אֱלֹהֵינוּ כִּי עָלֶיךָ נִשְׁעַנּוּ, וּבְשִׁמְךָ בָאנוּ עַל הֶהָמוֹן הַזֶּה, '+H+' אֱלֹהֵינוּ אַתָּה, אַל יַעְצֹר עִמְּךָ אֱנוֹשׁ.', r:'דברי הימים ב יד, י'}
+]},
+{ id:'tehilim138', cat:'yeshua', title:'תהלים קל״ח – נגד גאווה', src:'מוקד תהילים ארצי',
+  blocks:[
+  {v:'לְדָוִד, אוֹדְךָ בְכָל לִבִּי, נֶגֶד אֱלֹהִים אֲזַמְּרֶךָּ.', l:'א'},
+  {v:'אֶשְׁתַּחֲוֶה אֶל הֵיכַל קָדְשְׁךָ, וְאוֹדֶה אֶת שְׁמֶךָ עַל חַסְדְּךָ וְעַל אֲמִתֶּךָ, כִּי הִגְדַּלְתָּ עַל כָּל שִׁמְךָ אִמְרָתֶךָ.', l:'ב'},
+  {v:'בְּיוֹם קָרָאתִי וַתַּעֲנֵנִי, תַּרְהִבֵנִי בְנַפְשִׁי עֹז.', l:'ג'},
+  {v:'יוֹדוּךָ '+H+' כָּל מַלְכֵי אָרֶץ, כִּי שָׁמְעוּ אִמְרֵי פִיךָ.', l:'ד'},
+  {v:'וְיָשִׁירוּ בְּדַרְכֵי '+H+', כִּי גָדוֹל כְּבוֹד '+H+'.', l:'ה'},
+  {v:'כִּי רָם '+H+' וְשָׁפָל יִרְאֶה, וְגָבֹהַּ מִמֶּרְחָק יְיֵדָע.', l:'ו'},
+  {v:'אִם אֵלֵךְ בְּקֶרֶב צָרָה תְּחַיֵּנִי, עַל אַף אֹיְבַי תִּשְׁלַח יָדֶךָ, וְתוֹשִׁיעֵנִי יְמִינֶךָ.', l:'ז'},
+  {v:H+' יִגְמֹר בַּעֲדִי, '+H+' חַסְדְּךָ לְעוֹלָם, מַעֲשֵׂי יָדֶיךָ אַל תֶּרֶף.', l:'ח'}
+]},
+
+/* ---------------- ramban ---------------- */
+{ id:'ramban-a', cat:'ramban', title:'סגולה גדולה מהרמב״ן – עשרה פסוקים', src:'מהרמב״ן ז״ל',
+  note:'עשרה פסוקים מהרמב״ן ז״ל, צריך בהם כוונה גדולה. חמשה פסוקים הם מ־ז׳ תיבות, וחמשה האחרים מ־י״ב תיבות.',
+  blocks:[
+  {v:'בְּרֵאשִׁית בָּרָא אֱלֹהִים, אֵת הַשָּׁמַיִם וְאֵת הָאָרֶץ.', r:'בראשית א, א', l:'1'},
+  {v:'וּלְכֹל הַיָּד הַחֲזָקָה וּלְכֹל הַמּוֹרָא הַגָּדוֹל, אֲשֶׁר עָשָׂה מֹשֶׁה לְעֵינֵי כָּל יִשְׂרָאֵל.', r:'דברים לד, יב', l:'2'},
+  {v:'וְיַעֲקֹב הָלַךְ לְדַרְכּוֹ, וַיִּפְגְּעוּ בוֹ מַלְאֲכֵי אֱלֹהִים.', r:'בראשית לב, ב', l:'3'},
+  {v:'וַיֹּאמֶר יַעֲקֹב כַּאֲשֶׁר רָאָם, מַחֲנֵה אֱלֹהִים זֶה, וַיִּקְרָא שֵׁם הַמָּקוֹם הַהוּא מַחֲנָיִם.', r:'בראשית לב, ג', l:'4'},
+  {v:'הַאֲזִינוּ הַשָּׁמַיִם וַאֲדַבֵּרָה, וְתִשְׁמַע הָאָרֶץ אִמְרֵי פִי.', r:'דברים לב, א', l:'5'},
+  {v:'יַעֲרֹף כַּמָּטָר לִקְחִי, תִּזַּל כַּטַּל אִמְרָתִי, כִּשְׂעִירִם עֲלֵי דֶשֶׁא, וְכִרְבִיבִים עֲלֵי עֵשֶׂב.', r:'דברים לב, ב', l:'6'},
+  {v:'וַיְהִי בִּנְסֹעַ הָאָרֹן וַיֹּאמֶר מֹשֶׁה, קוּמָה '+H+' וְיָפֻצוּ אֹיְבֶיךָ, וְיָנֻסוּ מְשַׂנְאֶיךָ מִפָּנֶיךָ.', r:'במדבר י, לה', l:'7'},
+  {v:'וּבְנֻחֹה יֹאמַר, שׁוּבָה '+H+' רִבְבוֹת אַלְפֵי יִשְׂרָאֵל.', r:'במדבר י, לו', l:'8'},
+  {v:'וּצְבָאוֹ וּפְקֻדֵיהֶם, חֲמִשָּׁה וּשְׁלֹשִׁים אֶלֶף וְאַרְבַּע מֵאוֹת.', r:'במדבר ב, כג', l:'9'},
+  {v:'כָּל הַפְּקֻדִים לְמַחֲנֵה אֶפְרַיִם, מְאַת אֶלֶף וּשְׁמֹנַת אֲלָפִים וּמֵאָה לְצִבְאֹתָם, וּשְׁלִשִׁים יִסָּעוּ.', r:'במדבר ב, כד', l:'10'}
+]},
+{ id:'ramban-b', cat:'ramban', title:'פסוקי הרמב״ן לשמירה, חן והצלחה', src:'מהרמב״ן ז״ל · ראשי הקבוצות יוצרים את השם הוי״ה',
+  note:'הרמב״ן הפליג בתועלת אמירת עשרה פסוקים אלו, וגם לכתבם בקמיע. וכתב שהאומרם בכל יום יועילו לו לשמירה, ולמצוא חן והצלחה. יש בהם צ״א תיבות כמניין הוי״ה אדנ״י, ושס״ה אותיות כמניין ימות החמה, והם כנגד עשר ספירות.',
+  blocks:[
+  {h:'י'},
+  {v:'יוֹמָם יְצַוֶּה '+H+' חַסְדּוֹ, וּבַלַּיְלָה שִׁירֹה [שִׁירוֹ] עִמִּי, תְּפִלָּה לְאֵל חַיָּי.', r:'תהלים מב, ט'},
+  {v:'וַאֲנִי תְפִלָּתִי לְךָ '+H+' עֵת רָצוֹן, אֱלֹהִים בְּרָב חַסְדֶּךָ, עֲנֵנִי בֶּאֱמֶת יִשְׁעֶךָ.', r:'תהלים סט, יד'},
+  {v:'דָּרַשְׁתִּי אֶת '+H+' וְעָנָנִי, וּמִכָּל מְגוּרוֹתַי הִצִּילָנִי.', r:'תהלים לד, ה'},
+  {h:'ה'},
+  {v:'הַטֵּה אֵלַי אָזְנְךָ מְהֵרָה הַצִּילֵנִי, הֱיֵה לִי לְצוּר מָעוֹז, לְבֵית מְצוּדוֹת לְהוֹשִׁיעֵנִי.', r:'תהלים לא, ג'},
+  {v:'אֱלֹהִים לְהַצִּילֵנִי, '+H+' לְעֶזְרָתִי חוּשָׁה.', r:'תהלים ע, ב'},
+  {h:'ו'},
+  {v:'וְאַתָּה יֱהֹוִה אֲדֹנָי עֲשֵׂה אִתִּי לְמַעַן שְׁמֶךָ, כִּי טוֹב חַסְדְּךָ הַצִּילֵנִי.', r:'תהלים קט, כא'},
+  {v:'אַתָּה הָאֵל עֹשֵׂה פֶלֶא, הוֹדַעְתָּ בָעַמִּים עֻזֶּךָ.', r:'תהלים עז, טו'},
+  {v:'וַיּוֹשִׁיעֵם לְמַעַן שְׁמוֹ, לְהוֹדִיעַ אֶת גְּבוּרָתוֹ.', r:'תהלים קו, ח'},
+  {h:'ה'},
+  {v:'הִנֵּה אֵל יְשׁוּעָתִי אֶבְטַח וְלֹא אֶפְחָד, כִּי עָזִּי וְזִמְרָת יָהּ '+H+', וַיְהִי לִי לִישׁוּעָה.', r:'ישעיהו יב, ב'},
+  {v:'אֱלֹהִים אַל תִּרְחַק מִמֶּנִּי, אֱלֹהַי לְעֶזְרָתִי חוּשָׁה.', r:'תהלים עא, יב'}
+]}
+];
+
+
+
+/* ---------- meta ---------- */
+const CAT_META = {
+  daily:{color:'var(--c-daily)', grad:'linear-gradient(145deg,#5b3fd1,#8f74ff)', icon:'<path d="M12 3v2M12 19v2M5 12H3M21 12h-2M6.3 6.3L4.9 4.9M19.1 19.1l-1.4-1.4M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/><circle cx="12" cy="12" r="4"/>'},
+  shmira:{color:'var(--c-shmira)', grad:'linear-gradient(145deg,#0e8f86,#3cc6b6)', icon:'<path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/>'},
+  yeshua:{color:'var(--c-yeshua)', grad:'linear-gradient(145deg,#d0782d,#f2b25e)', icon:'<path d="M12 21s-7-4.4-9.3-9A5 5 0 0 1 12 6.5 5 5 0 0 1 21.3 12C19 16.6 12 21 12 21z"/>'},
+  ramban:{color:'var(--c-ramban)', grad:'linear-gradient(145deg,#b0438f,#e277bf)', icon:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/>'}
+};
+const svg = (p,extra='') => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extra}>${p}</svg>`;
+const STAR = '<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/>';
+const CHEV = '<path d="M15 18l-6-6 6-6"/>';
+const NIKUD = /[֑-ֽֿ-ׂׄ-ׇ]/g;
+const byId = Object.fromEntries(PRAYERS.map(p=>[p.id,p]));
+
+/* ---------- state (per-browser conveniences) ---------- */
+const store = {
+  get(k,d){ try{ const v=localStorage.getItem('betel-'+k); return v===null?d:JSON.parse(v);}catch(e){return d;} },
+  set(k,v){ try{ localStorage.setItem('betel-'+k, JSON.stringify(v)); }catch(e){} }
+};
+let favs = store.get('favs', []);
+let fs = store.get('fs', 23);
+let showNikud = store.get('nk', true);
+let theme = store.get('theme', 'auto');
+let activeCat = 'all';
+
+/* ---------- theme ---------- */
+const mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+function applyTheme(){
+  const dark = theme==='dark' || (theme==='auto' && mq && mq.matches);
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  document.querySelectorAll('#themeSeg button').forEach(b=>b.classList.toggle('on', b.dataset.t===theme));
+}
+if(mq && mq.addEventListener) mq.addEventListener('change', applyTheme);
+function applyFs(){ document.documentElement.style.setProperty('--fs', fs+'px'); document.getElementById('fsRange').value = fs; }
+
+/* ---------- greeting ---------- */
+(function(){
+  const h = new Date().getHours();
+  const t = h<5 ? 'לילה טוב' : h<12 ? 'בוקר טוב' : h<17 ? 'צהריים טובים' : h<21 ? 'ערב טוב' : 'לילה טוב';
+  document.getElementById('greetTitle').textContent = t;
+  try{
+    const heb = new Intl.DateTimeFormat('he-IL-u-ca-hebrew',{day:'numeric',month:'long',year:'numeric'}).format(new Date());
+    const wd = new Intl.DateTimeFormat('he-IL',{weekday:'long'}).format(new Date());
+    document.getElementById('hdate').textContent = wd + ' · ' + heb;
+  }catch(e){}
+
+})();
+
+/* ---------- home ---------- */
+function cardHTML(p){
+  const m = CAT_META[p.cat];
+  return `<button class="card" data-open="${p.id}" style="--cc:${m.color}">
+    ${p.repeat?`<span class="badge">×${p.repeat}</span>`:''}
+    <div class="ic" style="background:${m.grad}">${svg(m.icon)}</div>
+    <b>${p.title}</b><small>${p.src.split('·')[0].trim()}</small>
+    ${favs.includes(p.id)?`<svg class="star" viewBox="0 0 24 24" fill="currentColor">${STAR}</svg>`:''}
+  </button>`;
+}
+function rowHTML(p){
+  const m = CAT_META[p.cat];
+  return `<button class="row" data-open="${p.id}"><div class="ic" style="background:${m.grad}">${svg(m.icon)}</div>
+    <div><b>${p.title}</b><small>${CATS[p.cat]}</small></div>${svg(CHEV,'class="chev"')}</button>`;
+}
+function renderChips(){
+  const all = [['all','הכול'], ...Object.entries(CATS)];
+  document.getElementById('chips').innerHTML = all.map(([k,n])=>`<button class="chip ${k===activeCat?'on':''}" data-cat="${k}">${n}</button>`).join('');
+}
+function renderHome(){
+  renderChips();
+  const cats = activeCat==='all' ? Object.keys(CATS) : [activeCat];
+  document.getElementById('homeBody').innerHTML = cats.map(k=>{
+    const items = PRAYERS.filter(p=>p.cat===k);
+    return `<div class="sec-h"><h3>${CATS[k]}</h3><span>${items.length} פריטים</span></div><div class="grid">${items.map(cardHTML).join('')}</div>`;
+  }).join('');
+}
+function renderFavs(){
+  const el = document.getElementById('favList');
+  const items = favs.map(id=>byId[id]).filter(Boolean);
+  el.innerHTML = items.length ? items.map(rowHTML).join('') :
+    `<div class="empty">${svg(STAR)}<br>עדיין אין מועדפים.<br>פתח תפילה ולחץ על הכוכב כדי לשמור אותה כאן.</div>`;
+}
+
+/* ---------- search ---------- */
+const plain = t => t.replace(/<[^>]+>/g,' ').replace(NIKUD,'').replace(/[״"׳']/g,'');
+const INDEX = PRAYERS.map(p=>({id:p.id, hay: plain(p.title+' '+p.src+' '+(p.note||'')+' '+CATS[p.cat]+' '+p.blocks.map(b=>b.h||b.v||b.p).join(' '))}));
+function renderSearch(){
+  const q = plain(document.getElementById('q').value.trim());
+  const el = document.getElementById('results');
+  if(!q){ el.innerHTML = PRAYERS.map(rowHTML).join(''); return; }
+  const hits = INDEX.filter(x=>x.hay.includes(q)).map(x=>byId[x.id]);
+  el.innerHTML = hits.length ? hits.map(rowHTML).join('') : `<div class="empty">לא נמצאו תוצאות עבור "${q}"</div>`;
+}
+document.getElementById('q').addEventListener('input', renderSearch);
+
+/* ---------- reader ---------- */
+let current = null, count = 0;
+function blockHTML(b){
+  if(b.h) return `<h3>${b.h}</h3>`;
+  if(b.v) return `<p>${b.l?`<span class="ltr">${b.l}</span>`:''}${b.v}${b.r?`<span class="ref">(${b.r})</span>`:''}</p>`;
+  return `<p>${b.p}</p>`;
+}
+function renderText(){
+  const el = document.getElementById('rTxt'); if(!el) return;
+  el.innerHTML = showNikud ? el.dataset.orig : el.dataset.orig.replace(NIKUD,'');
+  document.getElementById('tNk').classList.toggle('on', showNikud);
+}
+function renderCounter(){
+  const p = current; if(!p || !p.repeat) return;
+  const ring = document.getElementById('ring');
+  ring.style.setProperty('--p', Math.round(count/p.repeat*100));
+  ring.querySelector('.in').innerHTML = count>=p.repeat ? `<span>✓</span><small>הושלם</small>` : `<span>${count}</span><small>מתוך ${p.repeat}</small>`;
+}
+function openPrayer(id, push=true){
+  const p = byId[id]; if(!p) return;
+  current = p; count = 0;
+  const i = PRAYERS.indexOf(p), m = CAT_META[p.cat];
+  const prev = PRAYERS[i-1], next = PRAYERS[i+1];
+  const body = document.getElementById('rBody');
+  body.style.setProperty('--cc', m.color);
+  body.innerHTML = `
+    <div class="rhead"><div class="ic" style="background:${m.grad}">${svg(m.icon)}</div>
+      <h1>${p.title}</h1><div class="src">${p.src}</div></div>
+    ${p.note?`<div class="rnote">${p.note}</div>`:''}
+    <div class="txt" id="rTxt"></div>
+    ${p.repeat?`<div class="counter"><button class="ring" id="ring" aria-label="ספירה"><div class="in"></div></button><button class="reset" id="rReset">איפוס ספירה</button></div>`:''}
+    <div class="pn">
+      ${prev?`<button data-open="${prev.id}"><span>→ הקודם</span><b>${prev.title}</b></button>`:'<span style="flex:1"></span>'}
+      ${next?`<button class="next" data-open="${next.id}"><span>הבא ←</span><b>${next.title}</b></button>`:'<span style="flex:1"></span>'}
+    </div>`;
+  const txt = document.getElementById('rTxt');
+  txt.dataset.orig = p.blocks.map(blockHTML).join('');
+  renderText();
+  if(p.repeat){
+    document.getElementById('ring').onclick = ()=>{ if(count<p.repeat){ count++; renderCounter(); if(count===p.repeat) toast('הושלם · יישר כוח'); try{navigator.vibrate&&navigator.vibrate(15)}catch(e){} } };
+    document.getElementById('rReset').onclick = ()=>{ count=0; renderCounter(); };
+    renderCounter();
+  }
+  document.getElementById('rTitle').textContent = p.title;
+  document.getElementById('rFav').classList.toggle('on', favs.includes(p.id));
+  const r = document.getElementById('reader');
+  r.classList.remove('hidden'); r.scrollTop = 0; r.classList.remove('scrolled');
+  r.style.animation='none'; void r.offsetWidth; r.style.animation='';
+  document.getElementById('rtools').classList.remove('hidden');
+  document.getElementById('tabbar').classList.add('hidden');
+  if(push) setHash(p.id);
+}
+function closeReader(push=true){
+  document.getElementById('reader').classList.add('hidden');
+  document.getElementById('rtools').classList.add('hidden');
+  document.getElementById('tabbar').classList.remove('hidden');
+  current = null;
+  renderHome(); renderFavs();
+  if(push) setHash(currentTab);
+}
+document.getElementById('reader').addEventListener('scroll', e=>{
+  e.currentTarget.classList.toggle('scrolled', e.currentTarget.scrollTop > 140);
+});
+document.getElementById('rBack').onclick = ()=>closeReader();
+document.getElementById('rFav').onclick = ()=>{
+  if(!current) return;
+  const on = !favs.includes(current.id);
+  favs = on ? [...favs, current.id] : favs.filter(x=>x!==current.id);
+  store.set('favs', favs);
+  document.getElementById('rFav').classList.toggle('on', on);
+  toast(on ? 'נשמר במועדפים' : 'הוסר מהמועדפים');
+};
+document.getElementById('tSm').onclick = ()=>{ fs=Math.max(16,fs-2); store.set('fs',fs); applyFs(); };
+document.getElementById('tLg').onclick = ()=>{ fs=Math.min(40,fs+2); store.set('fs',fs); applyFs(); };
+document.getElementById('tNk').onclick = ()=>{ showNikud=!showNikud; store.set('nk',showNikud); renderText(); syncSettings(); };
+document.getElementById('tTop').onclick = ()=>document.getElementById('reader').scrollTo({top:0,behavior:'smooth'});
+
+/* ---------- tabs & routing ---------- */
+const TABS = ['home','favs','search','settings'];
+let currentTab = 'home';
+function showTab(t, push=true){
+  if(!TABS.includes(t)) t='home';
+  currentTab = t;
+  TABS.forEach(x=>document.getElementById('v-'+x).classList.toggle('hidden', x!==t));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on', b.dataset.nav===t));
+  if(t==='favs') renderFavs();
+  if(t==='search') renderSearch();
+  if(t==='home') renderHome();
+  try{ window.scrollTo(0,0); }catch(e){}
+  if(push) setHash(t);
+}
+function setHash(h){ try{ if(location.hash.slice(1)!==h) history.replaceState(null,'','#'+h); }catch(e){} }
+function route(){
+  const h = location.hash.slice(1);
+  if(byId[h]) openPrayer(h,false);
+  else { if(current) closeReader(false); showTab(h||'home', false); }
+}
+window.addEventListener('hashchange', route);
+
+document.addEventListener('click', e=>{
+  const o = e.target.closest('[data-open]'); if(o){ openPrayer(o.dataset.open); return; }
+  const n = e.target.closest('[data-nav]'); if(n){ if(current) closeReader(false); showTab(n.dataset.nav); return; }
+  const c = e.target.closest('[data-cat]'); if(c){ activeCat=c.dataset.cat; renderHome(); }
+});
+
+/* ---------- settings ---------- */
+function syncSettings(){
+  document.getElementById('nkSw').classList.toggle('on', showNikud);
+  document.getElementById('fsPrev').textContent = showNikud ? 'מוֹדָה אֲנִי לְפָנֶיךָ' : 'מודה אני לפניך';
+}
+document.querySelectorAll('#themeSeg button').forEach(b=>b.onclick=()=>{ theme=b.dataset.t; store.set('theme',theme); applyTheme(); });
+document.getElementById('fsRange').oninput = e=>{ fs=+e.target.value; store.set('fs',fs); applyFs(); };
+document.getElementById('nkSw').onclick = ()=>{ showNikud=!showNikud; store.set('nk',showNikud); syncSettings(); };
+
+let tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),1600); }
+
+applyTheme(); applyFs(); syncSettings(); renderHome(); route();
+</script>
+</body>
+</html>
