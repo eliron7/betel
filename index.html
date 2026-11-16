@@ -163,7 +163,10 @@ input[type=range]{width:100%;accent-color:var(--brand2)}
 .ring span{position:relative;font-size:34px;font-weight:800;line-height:1}
 .ring small{position:relative;display:block;font-size:12px;color:var(--muted);font-weight:500;margin-top:4px}
 .ring .in{position:relative;text-align:center}
-.reset{border:0;background:none;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline}
+.counters{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;margin-top:26px}
+.counters .counter{margin:0}
+.clabel{font-size:13px;font-weight:700;color:var(--cc)}
+.reset{border:0;margin-top:10px;background:none;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline}
 
 .rtools{position:fixed;bottom:calc(14px + var(--safe-b));left:50%;transform:translateX(-50%);z-index:45;display:flex;gap:6px;align-items:center;padding:7px;border-radius:22px;
   background:color-mix(in srgb,var(--surface) 85%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line);box-shadow:0 10px 40px rgba(20,10,60,.2)}
@@ -428,6 +431,19 @@ const PRAYERS = [
   {v:'עֵינַי תָּמִיד אֶל '+H+', כִּי הוּא יוֹצִיא מֵרֶשֶׁת רַגְלָי.', r:'תהלים כה, טו', l:'ג'},
   {v:'לִישׁוּעָתְךָ קִוִּיתִי '+H+'.', r:'בראשית מט, יח', l:'ד'}
 ]},
+{ id:'erev-shabbat', cat:'yeshua', title:'סגולה לזרע בר קיימא', src:'לאומרה כל יום שישי לפני הדלקת נרות',
+  note:'סגולה גדולה לזכות לזרע בר קיימא: לומר 7 פעמים ברציפות את מזמור תהלים קכ״ז, ואחר כך 17 פעמים "ניצבת בת עדאל" – שם אמו של דוד המלך (בבא בתרא צא ע״א). בדף הסגולה נכתב שזהו גם שמו של מלאך שפותח את תפילת האדם.',
+  counters:[{label:'תהלים קכ״ז', n:7},{label:'ניצבת בת עדאל', n:17}],
+  blocks:[
+  {h:'1. תהלים קכ״ז – שבע פעמים'},
+  {v:'שִׁיר הַמַּעֲלוֹת לִשְׁלֹמֹה, אִם '+H+' לֹא יִבְנֶה בַיִת שָׁוְא עָמְלוּ בוֹנָיו בּוֹ, אִם '+H+' לֹא יִשְׁמָר עִיר שָׁוְא שָׁקַד שׁוֹמֵר.', l:'א'},
+  {v:'שָׁוְא לָכֶם מַשְׁכִּימֵי קוּם מְאַחֲרֵי שֶׁבֶת, אֹכְלֵי לֶחֶם הָעֲצָבִים, כֵּן יִתֵּן לִידִידוֹ שֵׁנָא.', l:'ב'},
+  {v:'הִנֵּה נַחֲלַת '+H+' בָּנִים, שָׂכָר פְּרִי הַבָּטֶן.', l:'ג'},
+  {v:'כְּחִצִּים בְּיַד גִּבּוֹר, כֵּן בְּנֵי הַנְּעוּרִים.', l:'ד'},
+  {v:'אַשְׁרֵי הַגֶּבֶר אֲשֶׁר מִלֵּא אֶת אַשְׁפָּתוֹ מֵהֶם, לֹא יֵבֹשׁוּ כִּי יְדַבְּרוּ אֶת אוֹיְבִים בַּשָּׁעַר.', l:'ה'},
+  {h:'2. שבע־עשרה פעמים'},
+  {p:'נִצֶּבֶת בַּת עַדְאֵל'}
+]},
 { id:'machloket', cat:'yeshua', title:'להינצל ממחלוקת', src:'ספר המידות, ערך מריבה',
   note:'למחלוקת, סגולה לומר: "ויקרא אסא אל ה׳" עד "אנוש".',
   blocks:[
@@ -533,7 +549,7 @@ function applyFs(){ document.documentElement.style.setProperty('--fs', fs+'px');
 function cardHTML(p){
   const m = CAT_META[p.cat];
   return `<button class="card" data-open="${p.id}" style="--cc:${m.color}">
-    ${p.repeat?`<span class="badge">×${p.repeat}</span>`:''}
+    ${countersOf(p).length?`<span class="badge">×${countersOf(p)[0].n}</span>`:''}
     <div class="ic" style="background:${m.grad}">${svg(m.icon)}</div>
     <b>${p.title}</b><small>${p.src.split('·')[0].trim()}</small>
     ${favs.includes(p.id)?`<svg class="star" viewBox="0 0 24 24" fill="currentColor">${STAR}</svg>`:''}
@@ -587,15 +603,20 @@ function renderText(){
   el.innerHTML = showNikud ? el.dataset.orig : el.dataset.orig.replace(NIKUD,'');
   document.getElementById('tNk').classList.toggle('on', showNikud);
 }
+function countersOf(p){ return p.counters || (p.repeat ? [{label:'', n:p.repeat}] : []); }
+let counts = [];
 function renderCounter(){
-  const p = current; if(!p || !p.repeat) return;
-  const ring = document.getElementById('ring');
-  ring.style.setProperty('--p', Math.round(count/p.repeat*100));
-  ring.querySelector('.in').innerHTML = count>=p.repeat ? `<span>✓</span><small>הושלם</small>` : `<span>${count}</span><small>מתוך ${p.repeat}</small>`;
+  const p = current; if(!p) return;
+  countersOf(p).forEach((c,i)=>{
+    const ring = document.getElementById('ring'+i); if(!ring) return;
+    const k = counts[i]||0;
+    ring.style.setProperty('--p', Math.round(k/c.n*100));
+    ring.querySelector('.in').innerHTML = k>=c.n ? `<span>✓</span><small>הושלם</small>` : `<span>${k}</span><small>מתוך ${c.n}</small>`;
+  });
 }
 function openPrayer(id, push=true){
   const p = byId[id]; if(!p) return;
-  current = p; count = 0;
+  current = p; counts = [];
   const i = PRAYERS.indexOf(p), m = CAT_META[p.cat];
   const prev = PRAYERS[i-1], next = PRAYERS[i+1];
   const body = document.getElementById('rBody');
@@ -605,7 +626,7 @@ function openPrayer(id, push=true){
       <h1>${p.title}</h1><div class="src">${p.src}</div></div>
     ${p.note?`<div class="rnote">${p.note}</div>`:''}
     <div class="txt" id="rTxt"></div>
-    ${p.repeat?`<div class="counter"><button class="ring" id="ring" aria-label="ספירה"><div class="in"></div></button><button class="reset" id="rReset">איפוס ספירה</button></div>`:''}
+    ${countersOf(p).length?`<div class="counters">${countersOf(p).map((c,i)=>`<div class="counter">${c.label?`<div class="clabel">${c.label}</div>`:''}<button class="ring" id="ring${i}" data-ci="${i}" aria-label="ספירה"><div class="in"></div></button></div>`).join('')}</div><div style="text-align:center"><button class="reset" id="rReset">איפוס ספירה</button></div>`:''}
     <div class="pn">
       ${prev?`<button data-open="${prev.id}"><span>→ הקודם</span><b>${prev.title}</b></button>`:'<span style="flex:1"></span>'}
       ${next?`<button class="next" data-open="${next.id}"><span>הבא ←</span><b>${next.title}</b></button>`:'<span style="flex:1"></span>'}
@@ -613,9 +634,12 @@ function openPrayer(id, push=true){
   const txt = document.getElementById('rTxt');
   txt.dataset.orig = p.blocks.map(blockHTML).join('');
   renderText();
-  if(p.repeat){
-    document.getElementById('ring').onclick = ()=>{ if(count<p.repeat){ count++; renderCounter(); if(count===p.repeat) toast('הושלם · יישר כוח'); try{navigator.vibrate&&navigator.vibrate(15)}catch(e){} } };
-    document.getElementById('rReset').onclick = ()=>{ count=0; renderCounter(); };
+  const cs = countersOf(p);
+  if(cs.length){
+    cs.forEach((c,i)=>{
+      document.getElementById('ring'+i).onclick = ()=>{ const k=counts[i]||0; if(k<c.n){ counts[i]=k+1; renderCounter(); if(counts[i]===c.n) toast('הושלם · יישר כוח'); try{navigator.vibrate&&navigator.vibrate(15)}catch(e){} } };
+    });
+    document.getElementById('rReset').onclick = ()=>{ counts=[]; renderCounter(); };
     renderCounter();
   }
   document.getElementById('rTitle').textContent = p.title;
